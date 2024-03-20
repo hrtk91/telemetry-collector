@@ -6,6 +6,8 @@ Raspberry Pi 3 Model B と Zero W 　向けに作成したﾃﾚﾒﾄﾘｺﾚ�
 現状は CPU 使用率と使用済みメモリ量を rocket で/metrics から取得可能です
 出力は opentelemetry-prometheus で出力されます
 
+![Grafana](image.png)
+
 ## 使い方
 
 1. `build.ps1`を実行することでビルド用 docker イメージを作成し、ビルド結果が armv6,armv7 ディレクトリに出力されます
