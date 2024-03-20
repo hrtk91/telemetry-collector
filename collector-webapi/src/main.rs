@@ -10,6 +10,7 @@ use rocket::{http::Status, State};
 fn metrics(
     state: &State<std::sync::Arc<std::sync::Mutex<std::process::ChildStdout>>>,
 ) -> Result<String, Status> {
+    // TODO:複数のクライアントから要求された際に冪等性がないため必要に応じて直す
     let mut result = String::new();
     {
         let mut stdout = state.try_lock().map_err(|e| {
