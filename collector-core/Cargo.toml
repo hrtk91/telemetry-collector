@@ -1,0 +1,18 @@
+[package]
+name = "collector-core"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+opentelemetry = "0.22.0"
+opentelemetry_sdk = "0.22.1"
+opentelemetry-stdout = { version = "0.2.0", features = ["trace"] }
+opentelemetry-prometheus = "0.15.0"
+tracing = "0.1"
+tracing-opentelemetry = "0.23.0"
+tracing-subscriber = "0.3"
+prometheus = "0.13.3"
+sysinfo = "0.30.7"
+dotenvy = "0.15.7"
