@@ -1,37 +1,21 @@
 #[macro_use]
 extern crate rocket;
 
-
-use std::io::Read;
-
+use collector_core::CollectorCore;
 use rocket::{http::Status, State};
 
 #[get("/metrics")]
 fn metrics(
-    state: &State<std::sync::Arc<std::sync::Mutex<std::process::ChildStdout>>>,
+    state: &State<std::sync::Arc<std::sync::Mutex<CollectorCore>>>,
 ) -> Result<String, Status> {
-    // TODO:複数のクライアントから要求された際に冪等性がないため必要に応じて直す
-    let mut result = String::new();
-    {
-        let mut stdout = state.try_lock().map_err(|e| {
-            println!("コアのstdoutがロックされています。: {:?}", e);
+    if let Ok(core) = state.try_lock() {
+        core.get_metrics().map_err(|e| {
+            eprintln!("failed to get metrics: {:#?}", e);
             Status::InternalServerError
-        })?;
-
-        let mut buf = [0; 2];
-        while 0 < stdout.read(&mut buf).unwrap_or(0) {
-            if (buf[0] == '\n' as u8 || buf[0] == '\r' as u8) && buf[1] == '\n' as u8 {
-                break;
-            }
-            result.push(buf[0] as char);
-            result.push(buf[1] as char);
-            buf = [0; 2];
-        }
+        })
+    } else {
+        Err(Status::InternalServerError)
     }
-
-    println!("{}", result);
-
-    Ok(result)
 }
 
 #[launch]
@@ -42,14 +26,9 @@ fn rocket() -> _ {
         })
         .ok();
 
-    let mut child = std::process::Command::new(std::env::var("CORE_PATH").unwrap_or("./collector-core".to_string()))
-        .stdout(std::process::Stdio::piped())
-        .spawn()
-        .expect("コアの起動に失敗しました。");
-
-    let stdout = child.stdout.take().expect("コアのstdoutがありません。");
+    let core = collector_core::CollectorCore::new();
 
     rocket::build()
         .mount("/", routes![metrics])
-        .manage(std::sync::Arc::new(std::sync::Mutex::new(stdout)))
+        .manage(std::sync::Arc::new(std::sync::Mutex::new(core)))
 }

@@ -8,3 +8,4 @@ edition = "2021"
 [dependencies]
 rocket = "0.5.0"
 dotenvy = "0.15.7"
+collector-core = { path = "../collector-core" }
