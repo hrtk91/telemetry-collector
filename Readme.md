@@ -2,18 +2,18 @@
 
 ## 概要
 
-Raspberry Pi 3 Model B と Zero W 　向けに作成したﾃﾚﾒﾄﾘｺﾚｸﾀｰ  
-現状は CPU 使用率と使用済みメモリ量を rocket で/metrics から取得可能です
-出力は opentelemetry-prometheus で出力されます
+Raspberry Pi 3 Model B と Zero W 向けに作成したﾃﾚﾒﾄﾘｺﾚｸﾀｰ  
+現状は CPU 使用率と使用済みメモリ量を rocket で/metrics から取得可能です  
+出力は opentelemetry-prometheus で出力されます  
 
-![Grafana](image.png)
+![Grafana](image.png)  
 
 ## 使い方
 
 1. `build.ps1`を実行することでビルド用 docker イメージを作成し、ビルド結果が armv6,armv7 ディレクトリに出力されます
 
-- armv6: Raspberry Pi Zero W 向け
-- armv7: Raspberry Pi 3 Model B 向け
+- armv6: Raspberry Pi Zero W 向け  
+- armv7: Raspberry Pi 3 Model B 向け  
 
 2. `.env`ファイルを作成し、以下の環境変数を設定します
 
